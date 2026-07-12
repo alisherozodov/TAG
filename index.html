@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Aurora Group</title>
+
+<meta name="description" content="The Aurora Group is a student-led organization creating unforgettable debate, speaking, chess, and leadership experiences. Join a community built for those who rise.">
+<meta name="theme-color" content="#0A0A0F">
+
+<meta property="og:title" content="The Aurora Group — Where Leaders Rise">
+<meta property="og:description" content="Debate championships, speaking nights, chess tournaments, and leadership experiences for students who want more.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="logo2.png">
+<link rel="stylesheet" href="https://cloudflare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   AURORA GROUP — DESIGN TOKENS
+   ============================================================ */
+:root{
+  /* brand violet ramp */
+  --violet-900:#4C1D95;
+  --violet-700:#6D28D9;
+  --violet-600:#7C3AED;
+  --violet-500:#8B5CF6;
+  --violet-400:#A855F7;
+  --violet-300:#C4B5FD;
+  --violet-glow: 141,92,246;
+
+  /* neutrals */
+  --black:#07070B;
+  --ink:#0A0A0F;
+  --charcoal:#141420;
+  --charcoal-2:#1B1B29;
+  --hairline: rgba(255,255,255,.09);
+  --hairline-strong: rgba(255,255,255,.16);
+  --white:#F6F4FF;
+  --dim: rgba(246,244,255,.62);
+  --dimmer: rgba(246,244,255,.5);
+
+  /* type */
+  --f-display:'Space Grotesk', 'Inter', sans-serif;
+  --f-body:'Inter', sans-serif;
+  --f-mono:'JetBrains Mono', monospace;
+
+  /* layout */
+  --container: 1240px;
+  --gutter: 24px;
+  --radius-s: 12px;
+  --radius-m: 20px;
+  --radius-l: 28px;
+
+  /* motion */
+  --ease-out: cubic-bezier(.16,1,.3,1);
+  --ease-in-out: cubic-bezier(.65,0,.35,1);
+  --dur-s: .25s;
+  --dur-m: .6s;
+  --dur-l: 1s;
+
+  --nav-h: 76px;
+}
+
+@media (prefers-color-scheme: light){ :root{ /* brand is intentionally dark-only */ } }
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+}
+html,body{ height:100%; }
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--white);
+  font-family:var(--f-body);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; }
+ul{ margin:0; padding:0; list-style:none; }
+h1,h2,h3,h4,p{ margin:0; }
+svg{ display:block; }
+
+::selection{ background:var(--violet-600); color:#fff; }
+
+/* focus visibility — never remove without replacing */
+:focus-visible{
+  outline:2px solid var(--violet-400);
+  outline-offset:3px;
+  border-radius:4px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+.container{
+  width:100%;
+  max-width:var(--container);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+
+.visually-hidden{
+  position:absolute; width:1px; height:1px;
+  padding:0; margin:-1px; overflow:hidden;
+  clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+.skip-link{
+  position:fixed; top:-100px; left:16px; z-index:1000;
+  background:var(--violet-600); color:#fff;
+  padding:12px 20px; border-radius:10px;
+  font-weight:600; transition:top var(--dur-s) var(--ease-out);
+}
+.skip-link:focus{ top:16px; }
+
+/* eyebrow / kicker */
+.eyebrow{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--f-mono);
+  font-size:12.5px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--violet-300);
+}
+.eyebrow::before{
+  content:'';
+  width:7px; height:7px; border-radius:50%;
+  background:var(--violet-400);
+  box-shadow:0 0 12px 2px rgba(var(--violet-glow),.9);
+}
+
+.grad-text{
+  background:linear-gradient(100deg, var(--violet-300), var(--violet-500) 55%, var(--violet-400));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+/* ============================================================
+   AMBIENT LAYERS — aurora canvas, noise, cursor glow, progress
+   ============================================================ */
+.aurora-canvas{
+  position:fixed; inset:0;
+  width:100%; height:100%;
+  z-index:0;
+  pointer-events:none;
+  background:var(--ink);
+}
+
+.noise-overlay{
+  position:fixed; inset:0;
+  z-index:1;
+  pointer-events:none;
+  opacity:.035;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.cursor-glow{
+  position:fixed;
+  top:0; left:0;
+  width:420px; height:420px;
+  margin-left:-210px; margin-top:-210px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(139,92,246,.14), transparent 70%);
+  pointer-events:none;
+  z-index:2;
+  transform:translate3d(-999px,-999px,0);
+  transition:opacity .3s ease;
+  will-change:transform;
+}
+@media (hover:none), (pointer:coarse){ .cursor-glow{ display:none; } }
+
+.scroll-progress{
+  position:fixed; top:0; left:0;
+  height:3px; width:0%;
+  background:linear-gradient(90deg, var(--violet-700), var(--violet-400));
+  z-index:1000;
+  box-shadow:0 0 12px rgba(var(--violet-glow),.7);
+  transition:width .08s linear;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav{
+  position:fixed; top:0; left:0; right:0;
+  z-index:200;
+  height:var(--nav-h);
+  display:flex; align-items:center;
+  transition:background var(--dur-s) var(--ease-out), border-color var(--dur-s) var(--ease-out), box-shadow var(--dur-s) var(--ease-out);
+  border-bottom:1px solid transparent;
+}
+.nav.is-scrolled{
+  background:rgba(10,10,15,.62);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border-bottom:1px solid var(--hairline);
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+}
+
+.nav__bar{
+  display:flex; align-items:center; gap:28px;
+  width:100%;
+}
+
+.nav__logo{ display:flex; align-items:center; gap:10px; margin-right:auto; }
+.nav__mark{ display:flex; filter:drop-shadow(0 0 10px rgba(var(--violet-glow),.55)); }
+.nav__wordmark{ font-family:var(--f-display); font-weight:600; font-size:16.5px; letter-spacing:-.01em; }
+
+.nav__links{ display:flex; align-items:center; gap:6px; }
+.nav__links a{
+  position:relative;
+  padding:9px 14px;
+  font-size:14.5px; font-weight:500;
+  color:var(--dim);
+  border-radius:99px;
+  transition:color var(--dur-s) var(--ease-out), background var(--dur-s) var(--ease-out);
+}
+.nav__links a:hover{ color:var(--white); background:rgba(255,255,255,.06); }
+.nav__links a.is-active{ color:var(--white); background:rgba(139,92,246,.16); }
+
+.btn{
+  position:relative;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:12px 22px;
+  font-size:14.5px; font-weight:600;
+  border-radius:99px;
+  border:1px solid transparent;
+  cursor:pointer;
+  white-space:nowrap;
+  isolation:isolate;
+  overflow:hidden;
+  transition:transform var(--dur-s) var(--ease-out), box-shadow var(--dur-s) var(--ease-out), border-color var(--dur-s) var(--ease-out), background var(--dur-s) var(--ease-out);
+}
+.btn svg{ transition:transform var(--dur-s) var(--ease-out); }
+.btn:hover svg{ transform:translateX(3px); }
+
+.btn--primary{
+  color:#fff;
+  background:linear-gradient(135deg, var(--violet-700), var(--violet-400));
+  box-shadow:0 6px 24px -6px rgba(var(--violet-glow),.55), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn--primary::before{
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(120px 60px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.35), transparent 70%);
+  opacity:0; transition:opacity var(--dur-s) ease;
+  z-index:-1;
+}
+.btn--primary:hover::before{ opacity:1; }
+.btn--primary:hover{ transform:translateY(-2px); box-shadow:0 10px 32px -6px rgba(var(--violet-glow),.75), inset 0 1px 0 rgba(255,255,255,.25); }
+.btn--primary:active{ transform:translateY(0); }
+
+.btn--ghost{
+  color:var(--white);
+  background:rgba(255,255,255,.04);
+  border-color:var(--hairline-strong);
+  backdrop-filter:blur(8px);
+}
+.btn--ghost:hover{ background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.28); transform:translateY(-2px); }
+
+.btn--large{ padding:16px 30px; font-size:16px; }
+.btn--small{ padding:9px 16px; font-size:13px; }
+.btn--full{ width:100%; }
+.btn--nav{ margin-left:6px; }
+
+.nav__toggle{
+  display:none;
+  position:relative;
+  width:44px; height:44px;
+  align-items:center; justify-content:center;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--hairline);
+  border-radius:12px;
+  cursor:pointer;
+}
+.nav__toggle-bar,
+.nav__toggle-bar::before,
+.nav__toggle-bar::after{
+  content:'';
+  position:absolute;
+  width:18px; height:1.6px;
+  background:var(--white);
+  border-radius:2px;
+  transition:transform var(--dur-s) var(--ease-in-out), opacity var(--dur-s) var(--ease-in-out), top var(--dur-s) var(--ease-in-out);
+}
+.nav__toggle-bar{ top:50%; transform:translateY(-50%); }
+.nav__toggle-bar::before{ top:-6px; left:0; }
+.nav__toggle-bar::after{ top:6px; left:0; }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bar{ background:transparent; }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bar::before{ top:0; transform:rotate(45deg); }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bar::after{ top:0; transform:rotate(-45deg); }
+
+/* mobile dropdown-style menu (used only as fallback overlay trigger; real nav below 900px uses app-shell tabs too) */
+.mobile-menu{
+  position:fixed; inset:var(--nav-h) 0 0 0;
+  z-index:190;
+  background:rgba(7,7,11,.86);
+  backdrop-filter:blur(24px) saturate(140%);
+  -webkit-backdrop-filter:blur(24px) saturate(140%);
+  opacity:0; visibility:hidden;
+  transform:translateY(-8px);
+  transition:opacity var(--dur-s) var(--ease-out), transform var(--dur-s) var(--ease-out), visibility 0s linear var(--dur-s);
+  overflow-y:auto;
+}
+.mobile-menu.is-open{
+  opacity:1; visibility:visible; transform:translateY(0);
+  transition:opacity var(--dur-s) var(--ease-out), transform var(--dur-s) var(--ease-out);
+}
+.mobile-menu__inner{ padding:32px var(--gutter) 40px; }
+.mobile-menu__label{ font-family:var(--f-mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--dimmer); margin-bottom:18px; }
+.mobile-menu__list{ display:flex; flex-direction:column; }
+.mobile-menu__list button{
+  display:flex; align-items:center; gap:14px;
+  width:100%;
+  padding:16px 4px;
+  background:none; border:0; border-bottom:1px solid var(--hairline);
+  color:var(--white);
+  font-family:var(--f-display);
+  font-size:22px; font-weight:500;
+  text-align:left;
+  cursor:pointer;
+}
+.mm-num{ font-family:var(--f-mono); font-size:12px; color:var(--violet-400); }
+.mobile-menu .btn--full{ margin-top:24px; }
+
+/* ============================================================
+   SECTION BASICS
+   ============================================================ */
+main{ position:relative; z-index:1; }
+.section{ position:relative; z-index:1; padding-block:120px; }
+.section-head{ max-width:640px; margin-bottom:56px; }
+.section-head .eyebrow{ margin-bottom:16px; }
+.section-title{
+  font-family:var(--f-display);
+  font-size:clamp(28px, 4vw, 44px);
+  font-weight:600;
+  letter-spacing:-.01em;
+  line-height:1.15;
+  margin-top:14px;
+}
+.section-lede{ margin-top:16px; font-size:17px; color:var(--dim); max-width:560px; }
+
+.reveal-up{
+  opacity:0;
+  transform:translateY(28px);
+  filter:blur(6px);
+  transition:opacity .8s var(--ease-out), transform .8s var(--ease-out), filter .8s var(--ease-out);
+}
+.reveal-up.is-visible{ opacity:1; transform:translateY(0); filter:blur(0); }
+.reveal-up[data-delay="1"]{ transition-delay:.08s; }
+.reveal-up[data-delay="2"]{ transition-delay:.16s; }
+.reveal-up[data-delay="3"]{ transition-delay:.24s; }
+.reveal-up[data-delay="4"]{ transition-delay:.32s; }
+.reveal-up[data-delay="5"]{ transition-delay:.4s; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  min-height:100svh;
+  display:flex; align-items:center; justify-content:center;
+  padding-top:calc(var(--nav-h) + 40px);
+  padding-bottom:80px;
+  overflow:hidden;
+}
+.hero__glow{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(600px 400px at 18% 20%, rgba(139,92,246,.20), transparent 60%),
+    radial-gradient(700px 500px at 85% 75%, rgba(168,85,247,.16), transparent 60%);
+  z-index:-1;
+  pointer-events:none;
+}
+.hero__inner{
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center;
+  max-width:900px;
+}
+.hero__title{
+  font-family:var(--f-display);
+  font-weight:700;
+  letter-spacing:-.03em;
+  line-height:.98;
+  font-size:clamp(44px, 9vw, 104px);
+}
+.hero__title .line{ display:block; overflow:hidden; }
+.hero__title .line span{ display:inline-block; }
+.hero__subtitle{
+  margin-top:28px;
+  font-size:clamp(16px, 1.6vw, 19px);
+  color:var(--dim);
+  max-width:620px;
+  line-height:1.6;
+}
+.hero__actions{ margin-top:38px; display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+.hero__stats{ margin-top:56px; display:flex; flex-wrap:wrap; gap:12px; justify-content:center; max-width:720px; }
+.stat-chip{
+  display:flex; align-items:center; gap:9px;
+  padding:10px 16px;
+  border-radius:99px;
+  background:rgba(255,255,255,.045);
+  border:1px solid var(--hairline);
+  backdrop-filter:blur(12px);
+  font-size:13.5px;
+  color:var(--dim);
+  animation:float 6s ease-in-out infinite;
+}
+.stat-chip svg{ color:var(--violet-400); flex-shrink:0; }
+.stat-chip strong{ color:var(--white); font-weight:700; }
+.stat-chip:nth-child(2){ animation-delay:.4s; }
+.stat-chip:nth-child(3){ animation-delay:.8s; }
+.stat-chip:nth-child(4){ animation-delay:1.2s; }
+.stat-chip:nth-child(5){ animation-delay:1.6s; }
+
+@keyframes float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-7px); } }
+
+.hero__scrollcue{ position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; }
+.hero__scrollcue span{ width:1px; height:36px; background:linear-gradient(var(--violet-400), transparent); position:relative; overflow:hidden; }
+.hero__scrollcue span::after{
+  content:''; position:absolute; top:-100%; left:0; width:100%; height:100%;
+  background:linear-gradient(var(--violet-300), transparent);
+  animation:scrollcue 2.2s ease-in-out infinite;
+}
+@keyframes scrollcue{ 0%{ top:-100%; } 60%,100%{ top:100%; } }
+.hero__scrollcue p{ font-family:var(--f-mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--dimmer); }
+
+/* ============================================================
+   ABOUT — values grid
+   ============================================================ */
+.values-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
+  background:var(--hairline); border:1px solid var(--hairline);
+  border-radius:var(--radius-m); overflow:hidden;
+}
+.value-card{ position:relative; background:var(--ink); padding:36px 32px; transition:background var(--dur-m) var(--ease-out); }
+.value-card::before{
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(220px 140px at 30% 0%, rgba(139,92,246,.14), transparent 70%);
+  opacity:0; transition:opacity var(--dur-m) ease;
+}
+.value-card:hover::before{ opacity:1; }
+.value-card:hover{ background:var(--charcoal); }
+.value-card__icon{
+  width:52px; height:52px; display:flex; align-items:center; justify-content:center;
+  border-radius:14px;
+  background:linear-gradient(135deg, rgba(139,92,246,.22), rgba(168,85,247,.1));
+  border:1px solid rgba(139,92,246,.3);
+  color:var(--violet-300); margin-bottom:20px;
+}
+.value-card h3{ font-family:var(--f-display); font-size:19px; font-weight:600; margin-bottom:8px; }
+.value-card p{ font-size:14.5px; color:var(--dim); line-height:1.6; }
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+.events-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+.event-card{
+  position:relative; padding:32px 28px; border-radius:var(--radius-m);
+  background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015));
+  border:1px solid var(--hairline); overflow:hidden;
+  transition:transform var(--dur-m) var(--ease-out), border-color var(--dur-m) var(--ease-out), box-shadow var(--dur-m) var(--ease-out);
+}
+.event-card::after{
+  content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
+  background:linear-gradient(140deg, var(--card-accent), transparent 40%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+  opacity:0; transition:opacity var(--dur-m) ease; pointer-events:none;
+}
+.event-card:hover::after{ opacity:1; }
+.event-card__glow{
+  position:absolute; top:-40%; right:-30%; width:220px; height:220px;
+  background:radial-gradient(circle, var(--card-accent), transparent 70%);
+  opacity:0; filter:blur(10px); transition:opacity var(--dur-m) ease; pointer-events:none;
+}
+.event-card:hover .event-card__glow{ opacity:.28; }
+.event-card:hover{ transform:translateY(-6px); border-color:rgba(255,255,255,.16); box-shadow:0 20px 50px -20px rgba(0,0,0,.6); }
+.event-card__icon{
+  width:52px; height:52px; display:flex; align-items:center; justify-content:center;
+  border-radius:14px; background:rgba(255,255,255,.05); color:var(--card-accent);
+  margin-bottom:22px; transition:transform var(--dur-m) var(--ease-out);
+}
+.event-card:hover .event-card__icon{ transform:scale(1.08) rotate(-4deg); }
+.event-card__tag{ font-family:var(--f-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--card-accent); margin-bottom:10px; }
+.event-card h3{ font-family:var(--f-display); font-size:21px; font-weight:600; margin-bottom:10px; }
+.event-card__desc{ font-size:14.5px; color:var(--dim); line-height:1.65; margin-bottom:20px; }
+.event-card__cta{ display:inline-flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; color:var(--white); }
+.event-card__cta svg{ transition:transform var(--dur-s) var(--ease-out); }
+.event-card:hover .event-card__cta svg{ transform:translateX(4px); }
+
+/* ============================================================
+   GALLERY — masonry
+   ============================================================ */
+.masonry{ display:grid; grid-template-columns:repeat(4, 1fr); grid-auto-rows:130px; gap:16px; }
+.masonry__item{ position:relative; margin:0; border-radius:var(--radius-s); overflow:hidden; background:var(--charcoal); border:1px solid var(--hairline); }
+.masonry__item[data-size="tall"]{ grid-row:span 3; grid-column:span 1; }
+.masonry__item[data-size="wide"]{ grid-row:span 2; grid-column:span 2; }
+.masonry__item[data-size="std"]{ grid-row:span 2; grid-column:span 1; }
+.masonry__item img{ width:100%; height:100%; object-fit:cover; transition:transform .7s var(--ease-out), filter .7s var(--ease-out); }
+.masonry__item::before{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,.55));
+  opacity:0; transition:opacity var(--dur-m) ease; z-index:1;
+}
+.masonry__item:hover::before{ opacity:1; }
+.masonry__item:hover img{ transform:scale(1.08); }
+
+/* ============================================================
+   TEAM
+   ============================================================ */
+.team-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:20px; }
+.team-card{
+  position:relative; text-align:center; padding:36px 22px; border-radius:var(--radius-m);
+  background:rgba(255,255,255,.025); border:1px solid var(--hairline);
+  transition:transform var(--dur-m) var(--ease-out), border-color var(--dur-m) var(--ease-out), box-shadow var(--dur-m) var(--ease-out);
+}
+.team-card:hover{ transform:translateY(-6px); border-color:rgba(139,92,246,.4); box-shadow:0 20px 50px -20px rgba(139,92,246,.35); }
+.team-card__portrait{
+  width:80px; height:80px; margin:0 auto 20px; border-radius:50%; overflow:hidden;
+  border:2px solid rgba(139,92,246,.4); box-shadow:0 0 0 6px rgba(139,92,246,.08);
+  transition:box-shadow var(--dur-m) ease;
+}
+.team-card:hover .team-card__portrait{ box-shadow:0 0 0 8px rgba(139,92,246,.18); }
+.team-card__portrait img{ width:100%; height:100%; object-fit:cover; }
+.team-card h3{ font-family:var(--f-display); font-size:18px; font-weight:600; }
+.team-card__role{ font-size:12.5px; color:var(--violet-300); font-family:var(--f-mono); letter-spacing:.03em; margin-top:4px; margin-bottom:14px; }
+.team-card__bio{ font-size:13.5px; color:var(--dim); line-height:1.6; margin-bottom:18px; }
+.team-card__socials{ display:flex; justify-content:center; gap:10px; }
+.team-card__socials a{
+  width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; background:rgba(255,255,255,.05); border:1px solid var(--hairline); color:var(--dim);
+  transition:color var(--dur-s) ease, background var(--dur-s) ease, transform var(--dur-s) ease;
+}
+.team-card__socials a:hover{ color:#fff; background:var(--violet-600); transform:translateY(-2px); }
+
+a, button, input {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================================
+   ACHIEVEMENTS + TIMELINE
+   ============================================================ */
+.stats-grid{
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:1px;
+  background:var(--hairline); border:1px solid var(--hairline);
+  border-radius:var(--radius-m); overflow:hidden; margin-bottom:100px;
+}
+.stat-block{ background:var(--ink); padding:40px 24px; text-align:center; }
+.stat-block__num{
+  font-family:var(--f-display); font-size:clamp(36px, 5vw, 56px); font-weight:700;
+  background:linear-gradient(135deg, var(--violet-300), var(--violet-500));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.stat-block__label{ margin-top:8px; font-size:13.5px; color:var(--dim); }
+
+.timeline{ position:relative; max-width:760px; margin-inline:auto; }
+.timeline__line{ position:absolute; left:9px; top:6px; bottom:6px; width:1px; background:var(--hairline-strong); }
+.timeline__list{ display:flex; flex-direction:column; gap:52px; }
+.timeline__item{ position:relative; padding-left:44px; }
+.timeline__dot{
+  position:absolute; left:0; top:4px; width:19px; height:19px; border-radius:50%;
+  background:var(--ink); border:2px solid var(--violet-400); box-shadow:0 0 0 5px rgba(139,92,246,.12);
+}
+.timeline__year{ font-family:var(--f-mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--violet-300); margin-bottom:8px; }
+.timeline__item h3{ font-family:var(--f-display); font-size:21px; font-weight:600; margin-bottom:8px; }
+.timeline__item p{ font-size:14.5px; color:var(--dim); line-height:1.65; max-width:520px; }
+
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
+.carousel{ max-width:760px; margin-inline:auto; }
+.carousel__track{ position:relative; min-height:190px; }
+.carousel__slide{
+  position:absolute; inset:0; margin:0; opacity:0; visibility:hidden; transform:translateY(14px);
+  transition:opacity .5s var(--ease-out), transform .5s var(--ease-out), visibility 0s linear .5s;
+  text-align:center;
+}
+.carousel__slide.is-active{
+  opacity:1; visibility:visible; transform:translateY(0);
+  transition:opacity .5s var(--ease-out), transform .5s var(--ease-out);
+  position:relative;
+}
+.carousel__slide p{ font-family:var(--f-display); font-size:clamp(19px, 2.4vw, 26px); font-weight:500; line-height:1.5; letter-spacing:-.01em; }
+.carousel__slide footer{ margin-top:22px; display:flex; flex-direction:column; gap:2px; }
+.carousel__slide footer strong{ font-size:14.5px; }
+.carousel__slide footer span{ font-size:13px; color:var(--dimmer); }
+.carousel__controls{ display:flex; align-items:center; justify-content:center; gap:20px; margin-top:36px; }
+.carousel__btn{
+  width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:50%;
+  background:rgba(255,255,255,.05); border:1px solid var(--hairline); color:var(--white); cursor:pointer;
+  transition:background var(--dur-s) ease, border-color var(--dur-s) ease, transform var(--dur-s) ease;
+}
+.carousel__btn:hover{ background:var(--violet-600); border-color:var(--violet-600); transform:scale(1.06); }
+.carousel__dots{ display:flex; gap:8px; }
+.carousel__dots button{
+  width:7px; height:7px; border-radius:50%; background:var(--hairline-strong); border:0; padding:0; cursor:pointer;
+  transition:background var(--dur-s) ease, transform var(--dur-s) ease, width var(--dur-s) ease;
+}
+.carousel__dots button.is-active{ background:var(--violet-400); width:22px; border-radius:4px; }
+
+/* ============================================================
+   JOIN CTA
+   ============================================================ */
+.join{ position:relative; z-index:1; padding-block:20px; }
+.join__panel{
+  position:relative; max-width:1100px; margin-inline:auto; margin-block:20px;
+  padding:80px 40px; border-radius:var(--radius-l); text-align:center; overflow:hidden;
+  background:linear-gradient(135deg, var(--violet-900), var(--violet-700) 55%, var(--violet-500));
+  border:1px solid rgba(255,255,255,.14);
+}
+.join__glow{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(500px 300px at 15% 15%, rgba(255,255,255,.18), transparent 60%),
+    radial-gradient(500px 300px at 85% 85%, rgba(168,85,247,.35), transparent 60%);
+  pointer-events:none;
+}
+.join__panel .eyebrow{ color:rgba(255,255,255,.85); justify-content:center; }
+.join__panel .eyebrow::before{ background:#fff; box-shadow:0 0 12px 2px rgba(255,255,255,.7); }
+.join__panel h2{
+  font-family:var(--f-display); font-size:clamp(30px, 4.6vw, 50px); font-weight:600; line-height:1.1; letter-spacing:-.01em;
+  margin-top:16px; color:#fff;
+}
+.join__panel h2 .grad-text{ background:linear-gradient(100deg, #fff, rgba(255,255,255,.75)); -webkit-background-clip:text; background-clip:text; }
+.join__panel > p{ margin-top:18px; color:rgba(255,255,255,.82); font-size:16.5px; max-width:480px; margin-inline:auto; }
+.join__panel .btn{ position:relative; margin-top:32px; }
+.join__panel .btn--primary{ background:#fff; color:var(--violet-700); box-shadow:0 10px 30px -8px rgba(0,0,0,.4); }
+.join__panel .btn--primary svg{ color:var(--violet-700); }
+.join__panel .btn--primary:hover{ transform:translateY(-2px) scale(1.02); }
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+.contact-card{
+  padding:32px 28px; border-radius:var(--radius-m);
+  background:rgba(255,255,255,.025); border:1px solid var(--hairline);
+  transition:transform var(--dur-m) var(--ease-out), border-color var(--dur-m) var(--ease-out), background var(--dur-m) var(--ease-out);
+  display:block;
+}
+.contact-card:hover{ transform:translateY(-5px); border-color:rgba(139,92,246,.35); background:rgba(255,255,255,.045); }
+.contact-card__icon{
+  width:48px; height:48px; display:flex; align-items:center; justify-content:center; border-radius:13px;
+  background:rgba(139,92,246,.14); color:var(--violet-300); margin-bottom:18px;
+}
+.contact-card h3{ font-family:var(--f-display); font-size:16px; font-weight:600; margin-bottom:6px; }
+.contact-card p{ font-size:14px; color:var(--dim); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{ position:relative; z-index:1; border-top:1px solid var(--hairline); padding-top:80px; overflow:hidden; }
+.footer__glow{
+  position:absolute; top:0; left:50%; transform:translateX(-50%); width:600px; height:200px;
+  background:radial-gradient(ellipse, rgba(139,92,246,.16), transparent 70%); pointer-events:none;
+}
+.footer__inner{ display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:40px; padding-bottom:56px; }
+.footer__brand p{ margin-top:14px; font-size:14px; color:var(--dim); max-width:280px; line-height:1.6; }
+.footer__socials{ display:flex; gap:10px; margin-top:20px; }
+.footer__socials a{
+  width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:50%;
+  background:rgba(255,255,255,.05); border:1px solid var(--hairline); color:var(--dim);
+  transition:color var(--dur-s) ease, background var(--dur-s) ease;
+}
+.footer__socials a:hover{ color:#fff; background:var(--violet-600); }
+.footer__nav-title{ font-family:var(--f-mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--dimmer); margin-bottom:16px; }
+.footer__nav ul{ display:flex; flex-direction:column; gap:11px; }
+.footer__nav a{ font-size:14.5px; color:var(--dim); transition:color var(--dur-s) ease; }
+.footer__nav a:hover{ color:var(--white); }
+.footer__contact p{ font-size:14.5px; color:var(--dim); margin-bottom:8px; }
+.footer__contact .btn{ margin-top:14px; }
+.footer__bottom{
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  padding-block:24px; border-top:1px solid var(--hairline); font-size:13px; color:var(--dimmer);
+}
+
+/* ============================================================
+   RESPONSIVE — DESKTOP TIER DOWN
+   ============================================================ */
+@media (max-width:1080px){
+  .events-grid{ grid-template-columns:repeat(2, 1fr); }
+  .team-grid{ grid-template-columns:repeat(2, 1fr); }
+  .values-grid{ grid-template-columns:repeat(2, 1fr); }
+  .contact-grid{ grid-template-columns:1fr; }
+  .footer__inner{ grid-template-columns:1fr 1fr; }
+  .footer__brand{ grid-column:1 / -1; }
+}
+
+@media (max-width:900px){
+  .nav__links, .btn--nav{ display:none; }
+  .nav__toggle{ display:flex; }
+  .masonry{ grid-template-columns:repeat(2, 1fr); }
+  .masonry__item[data-size="wide"]{ grid-column:span 2; }
+  .stats-grid{ grid-template-columns:repeat(2, 1fr); }
+}
+
+@media (max-width:640px){
+  :root{ --nav-h:68px; }
+  .section{ padding-block:80px; }
+  .hero__actions{ flex-direction:column; width:100%; }
+  .hero__actions .btn{ width:100%; }
+  .events-grid, .team-grid, .values-grid{ grid-template-columns:1fr; }
+  .join__panel{ padding:56px 24px; margin-inline:16px; }
+  .footer__inner{ grid-template-columns:1fr; }
+  .masonry{ grid-template-columns:1fr 1fr; grid-auto-rows:110px; }
+}
+
+/* ============================================================
+   MOBILE APP-SHELL — category-filtered single view
+   ------------------------------------------------------------
+   Below the breakpoint, sections stop being a long scroll and
+   become discrete panels. Only the active panel is shown; a
+   bottom tab bar switches between them instantly. Desktop is
+   completely unaffected — this block only runs under 900px AND
+   only once JS adds .mobile-shell to <html> (progressive
+   enhancement; if JS fails, mobile still gets the full scroll).
+   ============================================================ */
+html.mobile-shell{ scroll-behavior:auto; }
+
+html.mobile-shell body{
+  padding-bottom:78px; /* room for tab bar */
+}
+
+html.mobile-shell .panel{
+  display:none;
+  padding-top:calc(var(--nav-h) + 28px);
+  min-height:100svh;
+}
+html.mobile-shell .panel.is-active{
+  display:block;
+  animation:panelIn .45s var(--ease-out);
+}
+html.mobile-shell .panel.hero{
+  padding-top:calc(var(--nav-h) + 28px);
+  min-height:auto;
+  padding-bottom:60px;
+}
+html.mobile-shell .join{ display:none; }
+html.mobile-shell .join.is-active{ display:block; padding-top:calc(var(--nav-h) + 28px); }
+
+@keyframes panelIn{
+  from{ opacity:0; transform:translateY(16px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+/* footer stays visible always, tucked below the active panel */
+html.mobile-shell .footer{ display:block; }
+
+.tab-bar{
+  display:none;
+  position:fixed; bottom:0; left:0; right:0;
+  z-index:150;
+  padding:10px 8px calc(10px + env(safe-area-inset-bottom));
+  background:rgba(10,10,15,.82);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border-top:1px solid var(--hairline);
+  gap:2px;
+  overflow-x:auto;
+  -ms-overflow-style:none;
+  scrollbar-width:none;
+}
+.tab-bar::-webkit-scrollbar{ display:none; }
+html.mobile-shell .tab-bar{ display:flex; }
+
+.tab-bar__btn{
+  flex:0 0 auto;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding:8px 14px;
+  background:none; border:0;
+  color:var(--dimmer);
+  font-size:10.5px; font-weight:600;
+  border-radius:12px;
+  cursor:pointer;
+  transition:color var(--dur-s) ease, background var(--dur-s) ease;
+}
+.tab-bar__btn svg{ width:19px; height:19px; }
+.tab-bar__btn.is-active{ color:var(--violet-300); background:rgba(139,92,246,.14); }
+
+@media (min-width:901px){ .tab-bar{ display:none !important; } }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- progress bar -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- ambient aurora field, fixed behind everything -->
+<canvas id="auroraCanvas" class="aurora-canvas" aria-hidden="true"></canvas>
+<div class="noise-overlay" aria-hidden="true"></div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <nav class="nav__bar container" aria-label="Primary">
+    <a href="#home" class="nav__logo" data-nav-link data-target="home">
+      <span class="nav__mark" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 1L15.8 10.2L25 13L15.8 15.8L13 25L10.2 15.8L1 13L10.2 10.2L13 1Z" fill="url(#navMarkGrad)"/><defs><linearGradient id="navMarkGrad" x1="1" y1="1" x2="25" y2="25"><stop stop-color="#A855F7"/><stop offset="1" stop-color="#6D28D9"/></linearGradient></defs></svg>
+      </span>
+      <span class="nav__wordmark">The Aurora Group</span>
+    </a>
+
+    <ul class="nav__links" id="navLinks">
+      <li><a href="#home" data-nav-link data-target="home">Home</a></li>
+      <li><a href="#about" data-nav-link data-target="about">About</a></li>
+      <li><a href="#events" data-nav-link data-target="events">Events</a></li>
+      <li><a href="#gallery" data-nav-link data-target="gallery">Gallery</a></li>
+      <li><a href="#team" data-nav-link data-target="team">Squad</a></li>
+      <li><a href="#achievements" data-nav-link data-target="achievements">Achievements</a></li>
+      <li><a href="#join" data-nav-link data-target="join">Join Us</a></li>
+      <li><a href="#contact" data-nav-link data-target="contact">Contact</a></li>
+    </ul>
+
+    <a href="#join" class="btn btn--primary btn--nav" data-nav-link data-target="join">
+      <span>Join Aurora</span>
+    </a>
+
+    <button type="button" class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="nav__toggle-bar"></span>
+    </button>
+  </nav>
+</header>
+
+<!-- ================= MOBILE APP-SHELL MENU ================= -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Section menu" hidden>
+  <div class="mobile-menu__inner">
+    <p class="mobile-menu__label">Jump to a section</p>
+    <ul class="mobile-menu__list">
+      <li><button type="button" data-nav-link data-target="home"><span class="mm-num">00</span>Home</button></li>
+      <li><button type="button" data-nav-link data-target="about"><span class="mm-num">01</span>About</button></li>
+      <li><button type="button" data-nav-link data-target="events"><span class="mm-num">02</span>Events</button></li>
+      <li><button type="button" data-nav-link data-target="gallery"><span class="mm-num">03</span>Gallery</button></li>
+      <li><button type="button" data-nav-link data-target="team"><span class="mm-num">04</span>Squad</button></li>
+      <li><button type="button" data-nav-link data-target="achievements"><span class="mm-num">05</span>Achievements</button></li>
+      <li><button type="button" data-nav-link data-target="join"><span class="mm-num">06</span>Join Us</button></li>
+      <li><button type="button" data-nav-link data-target="contact"><span class="mm-num">07</span>Contact</button></li>
+    </ul>
+    <a href="#join" class="btn btn--primary btn--full" data-nav-link data-target="join">Join Aurora</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ================= HOME / HERO ================= -->
+  <section class="section panel hero" id="home" data-panel="home">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="container hero__inner">
+
+      <p class="eyebrow reveal-up">Est. 2025</p>
+
+      <h1 class="hero__title">
+        <span class="line" data-split>Where Ideas</span>
+        <span class="line" data-split><em class="grad-text">Rise.</em></span>
+      </h1>
+
+      <p class="hero__subtitle reveal-up" data-delay="1">
+        The Aurora Group transforms students into confident speakers, strategic thinkers,
+        and future leaders through unforgettable events, competitions, and experiences.
+      </p>
+
+      <div class="hero__actions reveal-up" data-delay="2">
+        <a href="#events" class="btn btn--primary btn--magnetic" data-nav-link data-target="events">
+          <span>Explore Events</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#join" class="btn btn--ghost btn--magnetic" data-nav-link data-target="join">
+          <span>Join Aurora</span>
+        </a>
+      </div>
+
+      <ul class="hero__stats reveal-up" data-delay="3">
+        <li class="stat-chip">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.5" opacity=".5"/><path d="M4 9h16M9 4v5" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span><strong>3</strong> Events</span>
+        </li>
+        <li class="stat-chip">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span><strong>20+</strong> Participants</span>
+        </li>
+        <li class="stat-chip">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l2.2 4.9L19.5 9l-3.9 3.4L16.8 18 12 15.2 7.2 18l1.2-5.6L4.5 9l5.3-1.1L12 3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          <span>Debate Champions</span>
+        </li>
+        <li class="stat-chip">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 20h6M12 16v4M6 4h12l-1 6a5 5 0 01-10 0L6 4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span>Chess Masters</span>
+        </li>
+        <li class="stat-chip">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a3 3 0 013 3v5a3 3 0 01-6 0V6a3 3 0 013-3z" stroke="currentColor" stroke-width="1.5"/><path d="M6 11a6 6 0 0012 0M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Public Speaking Excellence</span>
+        </li>
+      </ul>
+
+    </div>
+
+    <div class="hero__scrollcue" aria-hidden="true">
+      <span></span>
+      <p>Scroll</p>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="section panel about" id="about" data-panel="about">
+    <div class="container">
+      <div class="section-head reveal-up">
+        <p class="eyebrow">About Us</p>
+        <h2 class="section-title">Built by students who refused to settle for ordinary.</h2>
+        <p class="section-lede">
+          The Aurora Group is a student-led organization dedicated to creating unforgettable
+          educational and competitive experiences: the kind that turn a nervous freshman
+          into a confident finalist, and a quiet idea into a movement.
+        </p>
+      </div>
+
+      <div class="values-grid">
+        <article class="value-card reveal-up" data-delay="0">
+          <div class="value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 5.3L20 8.6l-4.2 3.7L17 18l-5-3-5 3 1.2-5.7L4 8.6l5.6-1.3L12 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+          <h3>Leadership</h3>
+          <p>We hand students the room, not just a seat in it: real ownership, from day one.</p>
+        </article>
+        <article class="value-card reveal-up" data-delay="1">
+          <div class="value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.5"/></svg></div>
+          <h3>Excellence</h3>
+          <p>Good enough never is. Every event is rehearsed, refined, and raised again.</p>
+        </article>
+        <article class="value-card reveal-up" data-delay="2">
+          <div class="value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2a6 6 0 00-3 11.2V16h6v-2.8A6 6 0 0012 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 20h4M10.5 18h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <h3>Innovation</h3>
+          <p>Formats get reinvented, not repeated. If it's been done the same way twice, we change it.</p>
+        </article>
+        <article class="value-card reveal-up" data-delay="3">
+          <div class="value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Confidence</h3>
+          <p>We build the muscle behind a steady voice: on stage, over the board, in the room.</p>
+        </article>
+        <article class="value-card reveal-up" data-delay="4">
+          <div class="value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="9" r="2.6" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="9" r="2.6" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 19c.8-3 2.6-4.6 4.5-4.6s3.7 1.6 4.5 4.6M11.5 19c.8-3 2.6-4.6 4.5-4.6s3.7 1.6 4.5 4.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <h3>Teamwork</h3>
+          <p>The best debates and boldest ideas are built by people who trust the person next to them.</p>
+        </article>
+        <article class="value-card reveal-up" data-delay="5">
+          <div class="value-card__icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3c-4.4 0-7 3-7 6.5 0 2.4 1.3 4 2.6 5.2.7.6 1.1 1.5 1.1 2.4V18h6.6v-1c0-.9.4-1.7 1.1-2.4C17.7 13.4 19 11.9 19 9.5 19 6 16.4 3 12 3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9.5 21h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <h3>Creativity</h3>
+          <p>Wildcards exist because the best ideas rarely fit inside a normal category.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EVENTS ================= -->
+  <section class="section panel events" id="events" data-panel="events">
+    <div class="container">
+      <div class="section-head reveal-up">
+        <p class="eyebrow">What We Run</p>
+        <h2 class="section-title">Six formats. One standard.</h2>
+        <p class="section-lede">Every Aurora event is built to be the best hour of someone's semester.</p>
+      </div>
+
+      <div class="events-grid">
+
+        <article class="event-card reveal-up" data-delay="0" style="--card-accent:#8B5CF6">
+          <div class="event-card__glow" aria-hidden="true"></div>
+          <div class="event-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 6v10a2 2 0 002 2h5M4 6L6 3h12l2 3M13 18h7M17 15l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p class="event-card__tag">Flagship</p>
+          <h3>Debate Championships</h3>
+          <p class="event-card__desc">Our largest tournament: structured rounds, real judges, and a bracket that rewards nerve as much as argument.</p>
+          <span class="event-card__cta">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </article>
+
+        <article class="event-card reveal-up" data-delay="1" style="--card-accent:#A855F7">
+          <div class="event-card__glow" aria-hidden="true"></div>
+          <div class="event-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a3 3 0 013 3v5a3 3 0 01-6 0V6a3 3 0 013-3z" stroke="currentColor" stroke-width="1.5"/><path d="M6 11a6 6 0 0012 0M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <p class="event-card__tag">Monthly</p>
+          <h3>Speaking Nights</h3>
+          <p class="event-card__desc">An open, low-stakes stage to test a new voice: five minutes, one idea, a room that actually listens.</p>
+          <span class="event-card__cta">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </article>
+
+        <article class="event-card reveal-up" data-delay="2" style="--card-accent:#7C3AED">
+          <div class="event-card__glow" aria-hidden="true"></div>
+          <div class="event-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 20h6M12 16v4M6 4h12l-1 6a5 5 0 01-10 0L6 4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+          <p class="event-card__tag">Termly</p>
+          <h3>Chess Tournament</h3>
+          <p class="event-card__desc">Swiss-format rounds across a full afternoon, from first-timers to the club's reigning board-one.</p>
+          <span class="event-card__cta">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </article>
+
+        <article class="event-card reveal-up" data-delay="3" style="--card-accent:#C4B5FD">
+          <div class="event-card__glow" aria-hidden="true"></div>
+          <div class="event-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l2.2 4.9L19.5 9l-3.9 3.4L16.8 18 12 15.2 7.2 18l1.2-5.6L4.5 9l5.3-1.1L12 3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
+          <p class="event-card__tag">Open Format</p>
+          <h3>Wildcard Competitions</h3>
+          <p class="event-card__desc">The category that breaks the categories: trivia, improv, rapid-fire pitches, whatever the semester calls for.</p>
+          <span class="event-card__cta">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </article>
+
+        <article class="event-card reveal-up" data-delay="4" style="--card-accent:#8B5CF6">
+          <div class="event-card__glow" aria-hidden="true"></div>
+          <div class="event-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.5" opacity=".5"/><path d="M4 9h16M9 4v5" stroke="currentColor" stroke-width="1.5"/></svg></div>
+          <p class="event-card__tag">Workshop Series</p>
+          <h3>Leadership Workshops</h3>
+          <p class="event-card__desc">Small-group sessions on negotiation, public presence, and running a room: taught by students, for students.</p>
+          <span class="event-card__cta">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </article>
+
+        <article class="event-card reveal-up" data-delay="5" style="--card-accent:#A855F7">
+          <div class="event-card__glow" aria-hidden="true"></div>
+          <div class="event-card__icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V6a2 2 0 012-2h9l5 5v10a2 2 0 01-2 2H6a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <p class="event-card__tag">Termly</p>
+          <h3>Academic Challenges</h3>
+          <p class="event-card__desc">Cross-subject quiz bowls and case competitions that reward range as much as depth.</p>
+          <span class="event-card__cta">Learn more <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GALLERY ================= -->
+  <section class="section panel gallery" id="gallery" data-panel="gallery">
+    <div class="container">
+      <div class="section-head reveal-up">
+        <p class="eyebrow">Moments</p>
+        <h2 class="section-title">The room, mid-argument.</h2>
+      </div>
+
+      <div class="masonry">
+        <figure class="masonry__item reveal-up" data-delay="0" data-size="tall">
+          <img src="photo1.jpg" alt="Captures" loading="lazy" width="600" height="800">
+        </figure>
+        <figure class="masonry__item reveal-up" data-delay="1" data-size="wide">
+          <img src="photo4.jpg" alt="Two players deep in concentration over a chess board" loading="lazy" width="900" height="600">
+        </figure>
+        <figure class="masonry__item reveal-up" data-delay="2" data-size="std">
+          <img src="photo6.jpg" alt="A packed audience seated for a speaking night" loading="lazy" width="700" height="700">
+        </figure>
+        <figure class="masonry__item reveal-up" data-delay="3" data-size="std">
+          <img src="photo8.jpg" alt="Students collaborating around a table of notes" loading="lazy" width="700" height="700">
+        </figure>
+        <figure class="masonry__item reveal-up" data-delay="4" data-size="wide">
+          <img src="photo5.jpg" alt="A speaker gesturing confidently on a lit stage" loading="lazy" width="900" height="600">
+        </figure>
+        <figure class="masonry__item reveal-up" data-delay="5" data-size="tall">
+          <img src="photo3.jpg" alt="Trophies and medals lined up after an awards ceremony" loading="lazy" width="600" height="800">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TEAM ================= -->
+  <section class="section panel team" id="team" data-panel="team">
+    <div class="container">
+      <div class="section-head reveal-up">
+        <p class="eyebrow">Leadership Board</p>
+        <h2 class="section-title">Run by students, for students.</h2>
+      </div>
+
+      <div class="team-grid">
+        <article class="team-card reveal-up" data-delay="0">
+          <div class="team-card__portrait"><img src="portrait.jpg" alt="Portrait of Alisher Ozodov" loading="lazy" width="3000" height="3000"></div>
+          <h3>Alisher Ozodov</h3>
+          <p class="team-card__role">.FOUNDER/</p>
+          <p class="team-card__bio">Visionary leader dedicated to transforming bold ideas into impactful experiences.</p>
+          <div class="team-card__socials">
+            <a href="https://linkedin.com/in/alisherozodov" aria-label="Maya Chen on LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2 3.77-2 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg></a>
+            <a href="https://t.me/nyxlvoid" aria-label="Maya Chen on Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16"> <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/>
+</svg></a>
+          </div>
+        </article>
+
+        <article class="team-card reveal-up" data-delay="1">
+          <div class="team-card__portrait"><img src="https://cdn-icons-png.flaticon.com/512/3282/3282224.png" alt="Portrait of Navbahor Yusupova" loading="lazy" width="200" height="200"></div>
+          <h3>Navbahor Yusupova</h3>
+          <p class="team-card__role">.ORGANIZER/VOLUNTEER</p>
+          <p class="team-card__bio">Crafting excellence through innovation, strategic thinking and cooperation.</p>
+          <div class="team-card__socials">
+            <a href="#" aria-label="Daniel Osei on LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2 3.77-2 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg></a>
+            <a href="#" aria-label="Daniel Osei on Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16">  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/>
+</svg></a>
+          </div>
+        </article>
+
+        <article class="team-card reveal-up" data-delay="2">
+          <div class="team-card__portrait"><img src="portrait2.jpg" alt="Portrait of Priya Nair" loading="lazy" width="200" height="200"></div>
+          <h3>Azizbek Abdullayev</h3>
+          <p class="team-card__role">.ORGANIZER/JUDGE</p>
+          <p class="team-card__bio">Behind every successful team is great organization. Dedicated to planning, coordination, and excellence in execution.</p>
+          <div class="team-card__socials">
+            <!-- <a href="#" aria-label="Priya Nair on LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2 3.77-2 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg></a> -->
+            <a href="https://t.me/Cmkfl" aria-label="Priya Nair on Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16"> <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/>
+</svg></a>
+          </div>
+        </article>
+
+        <!--<article class="team-card reveal-up" data-delay="3">
+          <div class="team-card__portrait"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400&auto=format&fit=crop" alt="Portrait of Leo Martins" loading="lazy" width="200" height="200"></div>
+          <h3>Leo Martins</h3>
+          <p class="team-card__role">Head of Speaking</p>
+          <p class="team-card__bio">Coaches every Speaking Night finalist personally — no exceptions, no shortcuts.</p>
+          <div class="team-card__socials">
+            <a href="#" aria-label="Leo Martins on LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2 3.77-2 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg></a>
+            <a href="#" aria-label="Leo Martins on Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 2 .25 2.7.53a5.4 5.4 0 011.98 1.29 5.4 5.4 0 011.29 1.98c.28.7.48 1.53.53 2.7.07 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.25 2-.53 2.7a5.8 5.8 0 01-3.27 3.27c-.7.28-1.53.48-2.7.53-1.25.07-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-2-.25-2.7-.53a5.4 5.4 0 01-1.98-1.29 5.4 5.4 0 01-1.29-1.98c-.28-.7-.48-1.53-.53-2.7C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.25-2 .53-2.7A5.4 5.4 0 013.09 2.47 5.4 5.4 0 015.07 1.18c.7-.28 1.53-.48 2.7-.53C9.02 2.2 9.4 2.2 12 2.2zm0 1.8c-3.15 0-3.52 0-4.76.07-.96.04-1.48.2-1.82.34-.46.18-.78.39-1.13.73-.34.35-.55.67-.73 1.13-.14.34-.3.86-.34 1.82-.07 1.24-.07 1.6-.07 4.76s0 3.52.07 4.76c.04.96.2 1.48.34 1.82.18.46.39.78.73 1.13.35.34.67.55 1.13.73.34.14.86.3 1.82.34 1.24.07 1.6.07 4.76.07s3.52 0 4.76-.07c.96-.04 1.48-.2 1.82-.34.46-.18.78-.39 1.13-.73.34-.35.55-.67.73-1.13.14-.34.3-.86.34-1.82.07-1.24.07-1.6.07-4.76s0-3.52-.07-4.76c-.04-.96-.2-1.48-.34-1.82a3 3 0 00-.73-1.13 3 3 0 00-1.13-.73c-.34-.14-.86-.3-1.82-.34-1.24-.07-1.6-.07-4.76-.07zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.8a3.2 3.2 0 100 6.4 3.2 3.2 0 000-6.4zm5.2-1.98a1.17 1.17 0 110 2.33 1.17 1.17 0 010-2.33z"/></svg></a>
+          </div>
+        </article>-->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ACHIEVEMENTS + TIMELINE ================= -->
+  <section class="section panel achievements" id="achievements" data-panel="achievements">
+    <div class="container">
+      <div class="section-head reveal-up">
+        <p class="eyebrow">By The Numbers</p>
+        <h2 class="section-title">One year of momentum.</h2>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-block reveal-up" data-delay="0">
+          <p class="stat-block__num" data-count-to="3">0</p>
+          <p class="stat-block__label">Events Hosted</p>
+        </div>
+        <div class="stat-block reveal-up" data-delay="1">
+          <p class="stat-block__num" data-count-to="20">0</p>
+          <p class="stat-block__label">Students Engaged</p>
+        </div>
+        <div class="stat-block reveal-up" data-delay="2">
+          <p class="stat-block__num" data-count-to="1">0</p>
+          <p class="stat-block__label">Awards Won</p>
+        </div>
+        <div class="stat-block reveal-up" data-delay="3">
+          <p class="stat-block__num" data-count-to="1">0</p>
+          <p class="stat-block__label">Years Active</p>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline__line" aria-hidden="true"></div>
+        <ol class="timeline__list">
+          <li class="timeline__item reveal-up" data-delay="0">
+            <div class="timeline__dot" aria-hidden="true"></div>
+            <p class="timeline__year">Term 1</p>
+            <h3>Twelve students, one classroom.</h3>
+            <p>Aurora starts as a dinnertime debate circle: no budget, no venue, just an argument worth having.</p>
+          </li>
+          <li class="timeline__item reveal-up" data-delay="1">
+            <div class="timeline__dot" aria-hidden="true"></div>
+            <p class="timeline__year">Term 2</p>
+            <h3>The first debate cup.</h3>
+            <p>Facilitated dynamic school debate tournament.</p>
+          </li>
+          <li class="timeline__item reveal-up" data-delay="2">
+            <div class="timeline__dot" aria-hidden="true"></div>
+            <p class="timeline__year">Term 3</p>
+            <h3>Speaking Nights launch.</h3>
+            <p>A new stage for students who wanted a mic, not a podium. It sells out every month since.</p>
+          </li>
+          <li class="timeline__item reveal-up" data-delay="3">
+            <div class="timeline__dot" aria-hidden="true"></div>
+            <p class="timeline__year">Term 4</p>
+            <h3>Aurora, today.</h3>
+            <p>Six event formats, a full leadership board, and a community that keeps growing.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TESTIMONIALS ================= -->
+  <section class="section panel testimonials" id="testimonials" data-panel="testimonials">
+    <div class="container">
+      <div class="section-head reveal-up">
+        <p class="eyebrow">In Their Words</p>
+        <h2 class="section-title">What members say after their first semester.</h2>
+      </div>
+
+      <div class="carousel" id="carousel">
+        <div class="carousel__track" id="carouselTrack">
+          <blockquote class="carousel__slide is-active">
+            <p>"Although everything did not go perfectly as planned, Aurora Debate clubs inspired me to get back into speaking English again."</p>
+            <footer><strong>Madina R.</strong><span>Debate Championships, Finalist</span></footer>
+          </blockquote>
+          <blockquote class="carousel__slide">
+            <p>"Speaking Nights provided a friendly environment where I could practice speaking English as much as I wanted."</p>
+            <footer><strong>Diyorbek Y.</strong><span>Speaking Nights Regular</span></footer>
+          </blockquote>
+          <blockquote class="carousel__slide">
+            <p>"The debate event helped me develop my critical thinking and public speaking skills while learning to express my ideas with confidence."</p>
+            <footer><strong>Farangiz R.</strong><span>Active Participant Nomination Winner</span></footer>
+          </blockquote>
+          <blockquote class="carousel__slide">
+            <p>"The students organized the event very well. It was encouraging to see them express their ideas clearly and engage in meaningful discussions."</p>
+            <footer><strong>Dilorom R.</strong><span>Teacher</span></footer>
+          </blockquote>
+        </div>
+        <div class="carousel__controls">
+          <button type="button" class="carousel__btn" id="carouselPrev" aria-label="Previous testimonial">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="carousel__dots" id="carouselDots" role="tablist" aria-label="Testimonial navigation"></div>
+          <button type="button" class="carousel__btn" id="carouselNext" aria-label="Next testimonial">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= JOIN CTA ================= -->
+  <section class="join" id="join" data-panel="join">
+    <div class="join__panel reveal-up">
+      <div class="join__glow" aria-hidden="true"></div>
+      <p class="eyebrow">Applications Open</p>
+      <h2>Become Part of Something <span class="grad-text">Extraordinary.</span></h2>
+      <p>Membership is free, open to every student, and takes less than two minutes to start.</p>
+      <a href="https://t.me/+OMn127yToaljZjEy" class="btn btn--primary btn--large btn--magnetic">
+        <span>Join Now</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="section panel contact" id="contact" data-panel="contact">
+    <div class="container">
+      <div class="section-head reveal-up">
+        <p class="eyebrow">Get In Touch</p>
+        <h2 class="section-title">Questions before you join?</h2>
+      </div>
+
+      <div class="contact-grid">
+        <a class="contact-card reveal-up" data-delay="0" href="mailto:aiisher.ozodoff@gmail.com">
+          <div class="contact-card__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4z" stroke="currentColor" stroke-width="1.5"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Email</h3>
+          <p>aiisher.ozodoff@gmail.com</p>
+        </a>
+        <a class="contact-card reveal-up" data-delay="1" href="#">
+          <div class="contact-card__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0119 9.5C19 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+          <h3>Location</h3>
+          <p>Muhammad al-Khwarizmi Specialised School</p>
+        </a>
+        <a class="contact-card reveal-up" data-delay="2" href="#">
+          <div class="contact-card__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v4H4zM4 10h10v10H4zM16 10h4v10h-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+          <h3>Socials</h3>
+          <p>Follow our social media, and click Join Aurora on the navigation bar to join our private Telegram channel.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="footer__glow" aria-hidden="true"></div>
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a href="#home" class="nav__logo" data-nav-link data-target="home">
+        <span class="nav__mark" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M13 1L15.8 10.2L25 13L15.8 15.8L13 25L10.2 15.8L1 13L10.2 10.2L13 1Z" fill="url(#footMarkGrad)"/><defs><linearGradient id="footMarkGrad" x1="1" y1="1" x2="25" y2="25"><stop stop-color="#A855F7"/><stop offset="1" stop-color="#6D28D9"/></linearGradient></defs></svg>
+        </span>
+        <span class="nav__wordmark">The Aurora Group</span>
+      </a>
+      <p>Where students become the leaders their school remembers.</p>
+      <div class="footer__socials">
+        <!-- <a href="#" aria-label="Aurora Group on Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 2 .25 2.7.53a5.4 5.4 0 011.98 1.29 5.4 5.4 0 011.29 1.98c.28.7.48 1.53.53 2.7.07 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.25 2-.53 2.7a5.8 5.8 0 01-3.27 3.27c-.7.28-1.53.48-2.7.53-1.25.07-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-2-.25-2.7-.53a5.4 5.4 0 01-1.98-1.29 5.4 5.4 0 01-1.29-1.98c-.28-.7-.48-1.53-.53-2.7C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.25-2 .53-2.7A5.4 5.4 0 013.09 2.47 5.4 5.4 0 015.07 1.18c.7-.28 1.53-.48 2.7-.53C9.02 2.2 9.4 2.2 12 2.2z"/></svg></a> -->
+        <!-- <a href="#" aria-label="Aurora Group on LinkedIn"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2 3.77-2 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg></a> -->
+        <a href="https://t.me/+OMn127yToaljZjEy" aria-label="Aurora Group on Telergam"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/>
+</svg></a>
+      </div>
+    </div>
+
+    <nav class="footer__nav" aria-label="Footer">
+      <p class="footer__nav-title">Explore</p>
+      <ul>
+        <li><a href="#about" data-nav-link data-target="about">About</a></li>
+        <li><a href="#events" data-nav-link data-target="events">Events</a></li>
+        <li><a href="#gallery" data-nav-link data-target="gallery">Gallery</a></li>
+        <li><a href="#team" data-nav-link data-target="team">Team</a></li>
+        <li><a href="#achievements" data-nav-link data-target="achievements">Achievements</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer__contact">
+      <p class="footer__nav-title">Contact</p>
+      <p>aiisher.ozodoff@gmail.com</p>
+      <p>Muhammad al-Khwarizmi Specialised School</p>
+      <a href="#join" class="btn btn--ghost btn--small" data-nav-link data-target="join">Join Aurora</a>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>© <span id="year"></span> The Aurora Group. All rights reserved.</p>
+    <p>Built by students, for students.</p>
+  </div>
+</footer>
+
+<!-- mobile-only category tab bar (JS shows/hides via .mobile-shell on <html>) -->
+<nav class="tab-bar" id="tabBar" aria-label="Section switcher">
+  <button type="button" class="tab-bar__btn" data-nav-link data-target="home" aria-label="Home">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 11l8-7 8 7M6 10v9h12v-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Home
+  </button>
+  <button type="button" class="tab-bar__btn" data-nav-link data-target="about" aria-label="About">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5.5M12 8v.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    About
+  </button>
+  <button type="button" class="tab-bar__btn" data-nav-link data-target="events" aria-label="Events">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 10h16M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    Events
+  </button>
+  <button type="button" class="tab-bar__btn" data-nav-link data-target="gallery" aria-label="Gallery">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.6" stroke="currentColor" stroke-width="1.4"/><path d="M20 15l-4.5-4.5-3 3-2-2L4 17" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    Gallery
+  </button>
+  <button type="button" class="tab-bar__btn" data-nav-link data-target="team" aria-label="Team">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="8.5" r="2.8" stroke="currentColor" stroke-width="1.6"/><path d="M3.6 19c.9-3.4 2.9-5.2 5.4-5.2s4.5 1.8 5.4 5.2M15.5 8.2a2.6 2.6 0 110 5.2M18 13.9c1.6.4 2.7 1.7 3.2 3.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    Team
+  </button>
+  <button type="button" class="tab-bar__btn" data-nav-link data-target="achievements" aria-label="Achievements">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5l2 4.4 4.8.6-3.5 3.4.8 4.8-4.1-2.3-4.1 2.3.8-4.8-3.5-3.4 4.8-.6L12 2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    Awards
+  </button>
+  <!-- <button type="button" class="tab-bar__btn" data-nav-link data-target="join" aria-label="Join Us">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    Join
+  </button>
+  <button type="button" class="tab-bar__btn" data-nav-link data-target="contact" aria-label="Contact">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16v12H4z" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Contact
+  </button> -->
+</nav>
+
+<script>
+(function(){
+  'use strict';
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isCoarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+  /* ============================================================
+     1. FOOTER YEAR
+     ============================================================ */
+  var yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* ============================================================
+     2. SCROLL PROGRESS BAR
+     ============================================================ */
+  var progressBar = document.getElementById('scrollProgress');
+  function updateProgress(){
+    if (!progressBar) return;
+    var doc = document.documentElement;
+    var scrollTop = doc.scrollTop || document.body.scrollTop;
+    var height = (doc.scrollHeight - doc.clientHeight) || 1;
+    var pct = Math.min(100, Math.max(0, (scrollTop / height) * 100));
+    progressBar.style.width = pct + '%';
+  }
+
+  /* ============================================================
+     3. STICKY NAV BACKGROUND
+     ============================================================ */
+  var navEl = document.getElementById('nav');
+  function updateNavBg(){
+    if (!navEl) return;
+    if (window.scrollY > 12) navEl.classList.add('is-scrolled');
+    else navEl.classList.remove('is-scrolled');
+  }
+
+  var scrollTicking = false;
+  function onScroll(){
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(function(){
+      updateProgress();
+      updateNavBg();
+      scrollTicking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  updateProgress();
+  updateNavBg();
+
+  /* ============================================================
+     4. AURORA CANVAS — signature ambient light field
+     ------------------------------------------------------------
+     Three slow-drifting soft ribbons of violet light, rendered
+     with layered radial gradients on a low-res offscreen canvas
+     then upscaled, so it stays cheap on low-end hardware. Frame
+     rate is throttled and the whole loop pauses when the tab is
+     hidden or reduced motion is requested.
+     ============================================================ */
+  var canvas = document.getElementById('auroraCanvas');
+  if (canvas && canvas.getContext){
+    var ctx = canvas.getContext('2d', { alpha:false });
+    var W, H, DPR;
+    var ribbons = [
+      { hue:[139,92,246], baseY:0.22, amp:70,  speed:.00018, phase:0,    widthMul:1.15 },
+      { hue:[168,85,247], baseY:0.55, amp:90,  speed:.00013, phase:2.1,  widthMul:1.4  },
+      { hue:[109,40,217], baseY:0.78, amp:60,  speed:.00021, phase:4.3,  widthMul:1.0  }
+    ];
+
+    function resize(){
+      DPR = Math.min(window.devicePixelRatio || 1, 1.6); /* cap DPR for perf */
+      W = canvas.width = Math.floor(window.innerWidth * DPR);
+      H = canvas.height = Math.floor(window.innerHeight * DPR);
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+    }
+    resize();
+
+    var resizeTimer;
+    window.addEventListener('resize', function(){
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    });
+
+    var running = !reduceMotion;
+    var lastFrame = 0;
+    var frameInterval = 1000 / 30; /* cap to 30fps ambient — plenty smooth, cheap on battery */
+
+    function drawFrame(t){
+      if (!running) return;
+      requestAnimationFrame(drawFrame);
+      if (t - lastFrame < frameInterval) return;
+      lastFrame = t;
+
+      ctx.fillStyle = '#07070B';
+      ctx.fillRect(0, 0, W, H);
+
+      for (var i = 0; i < ribbons.length; i++){
+        var r = ribbons[i];
+        var cy = H * r.baseY + Math.sin(t * r.speed + r.phase) * r.amp * DPR;
+        var cx = W * 0.5 + Math.cos(t * r.speed * 0.7 + r.phase) * W * 0.25;
+        var rw = W * 0.65 * r.widthMul;
+        var rh = 220 * DPR;
+
+        var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, rw);
+        grad.addColorStop(0, 'rgba(' + r.hue.join(',') + ',0.22)');
+        grad.addColorStop(0.5, 'rgba(' + r.hue.join(',') + ',0.09)');
+        grad.addColorStop(1, 'rgba(' + r.hue.join(',') + ',0)');
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(1, rh / rw);
+        ctx.translate(-cx, -cy);
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, rw, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    if (running) requestAnimationFrame(drawFrame);
+    else {
+      /* static single paint for reduced-motion users */
+      ctx.fillStyle = '#07070B';
+      ctx.fillRect(0, 0, W, H);
+      var sg = ctx.createRadialGradient(W*0.3,H*0.25,0,W*0.3,H*0.25,W*0.6);
+      sg.addColorStop(0,'rgba(139,92,246,0.16)');
+      sg.addColorStop(1,'rgba(139,92,246,0)');
+      ctx.fillStyle = sg;
+      ctx.fillRect(0,0,W,H);
+    }
+
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) running = false;
+      else if (!reduceMotion){ running = true; requestAnimationFrame(drawFrame); }
+    });
+  }
+
+  /* ============================================================
+     5. CURSOR GLOW (desktop / fine-pointer only)
+     ============================================================ */
+  var cursorGlow = document.getElementById('cursorGlow');
+  if (cursorGlow && !isCoarsePointer && !reduceMotion){
+    var mouseX = -999, mouseY = -999, glowX = -999, glowY = -999;
+    window.addEventListener('mousemove', function(e){
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorGlow.style.opacity = '1';
+    });
+    document.addEventListener('mouseleave', function(){ cursorGlow.style.opacity = '0'; });
+
+    function animateGlow(){
+      glowX += (mouseX - glowX) * 0.12;
+      glowY += (mouseY - glowY) * 0.12;
+      cursorGlow.style.transform = 'translate3d(' + glowX + 'px,' + glowY + 'px,0)';
+      requestAnimationFrame(animateGlow);
+    }
+    requestAnimationFrame(animateGlow);
+  }
+
+  /* ============================================================
+     6. MAGNETIC BUTTONS + primary-button light follow
+     ============================================================ */
+  if (!isCoarsePointer && !reduceMotion){
+    var magButtons = document.querySelectorAll('.btn--magnetic');
+    magButtons.forEach(function(btn){
+      btn.addEventListener('mousemove', function(e){
+        var rect = btn.getBoundingClientRect();
+        var relX = e.clientX - rect.left - rect.width / 2;
+        var relY = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = 'translate(' + (relX * 0.18) + 'px,' + (relY * 0.35) + 'px)';
+      });
+      btn.addEventListener('mouseleave', function(){ btn.style.transform = ''; });
+    });
+
+    var primaryButtons = document.querySelectorAll('.btn--primary');
+    primaryButtons.forEach(function(btn){
+      btn.addEventListener('mousemove', function(e){
+        var rect = btn.getBoundingClientRect();
+        btn.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+        btn.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+      });
+    });
+  }
+
+  /* ============================================================
+     7. REVEAL-ON-SCROLL
+     ============================================================ */
+  var revealEls = document.querySelectorAll('.reveal-up');
+  if ('IntersectionObserver' in window && !reduceMotion){
+    var revealObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.12, rootMargin:'0px 0px -6% 0px' });
+    revealEls.forEach(function(el){ revealObserver.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  /* ============================================================
+     8. HERO TEXT REVEAL (split-line rise)
+     ============================================================ */
+  var heroLines = document.querySelectorAll('.hero__title .line');
+  heroLines.forEach(function(line, i){
+    var text = line.textContent;
+    var inner = document.createElement('span');
+    inner.textContent = text;
+    line.textContent = '';
+    line.appendChild(inner);
+    if (!reduceMotion){
+      inner.style.transform = 'translateY(110%)';
+      inner.style.opacity = '0';
+      inner.style.transition = 'transform 1s cubic-bezier(.16,1,.3,1) ' + (i * 0.12 + 0.1) + 's, opacity 1s ease ' + (i * 0.12 + 0.1) + 's';
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          inner.style.transform = 'translateY(0)';
+          inner.style.opacity = '1';
+        });
+      });
+    }
+  });
+
+  /* ============================================================
+     9. ANIMATED COUNTERS
+     ============================================================ */
+  var counterEls = document.querySelectorAll('[data-count-to]');
+  function runCounter(el){
+    var target = parseInt(el.getAttribute('data-count-to'), 10) || 0;
+    if (reduceMotion){ el.textContent = target.toLocaleString(); return; }
+    var duration = 1600;
+    var start = null;
+    function step(ts){
+      if (start === null) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString();
+    }
+    requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window){
+    var counterObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          runCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.5 });
+    counterEls.forEach(function(el){ counterObserver.observe(el); });
+  } else {
+    counterEls.forEach(runCounter);
+  }
+
+  /* ============================================================
+     10. TESTIMONIAL CAROUSEL
+     ============================================================ */
+  var track = document.getElementById('carouselTrack');
+  if (track){
+    var slides = Array.prototype.slice.call(track.querySelectorAll('.carousel__slide'));
+    var dotsWrap = document.getElementById('carouselDots');
+    var prevBtn = document.getElementById('carouselPrev');
+    var nextBtn = document.getElementById('carouselNext');
+    var current = 0;
+    var autoTimer;
+
+    slides.forEach(function(_, i){
+      var dot = document.createElement('button');
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', 'Show testimonial ' + (i + 1));
+      if (i === 0) dot.classList.add('is-active');
+      dot.addEventListener('click', function(){ goTo(i); resetAuto(); });
+      dotsWrap.appendChild(dot);
+    });
+    var dots = Array.prototype.slice.call(dotsWrap.children);
+
+    function goTo(i){
+      slides[current].classList.remove('is-active');
+      dots[current].classList.remove('is-active');
+      current = (i + slides.length) % slides.length;
+      slides[current].classList.add('is-active');
+      dots[current].classList.add('is-active');
+    }
+    function resetAuto(){
+      clearInterval(autoTimer);
+      if (!reduceMotion) autoTimer = setInterval(function(){ goTo(current + 1); }, 6000);
+    }
+    prevBtn.addEventListener('click', function(){ goTo(current - 1); resetAuto(); });
+    nextBtn.addEventListener('click', function(){ goTo(current + 1); resetAuto(); });
+    resetAuto();
+  }
+
+  /* ============================================================
+     11. MOBILE APP-SHELL CONTROLLER
+     ------------------------------------------------------------
+     Below 900px, replace long-scroll with discrete panels: tap a
+     nav item / tab and only that section's content is shown,
+     nothing else. Desktop is untouched — this only activates the
+     .mobile-shell class on <html> when the media query matches,
+     and removes it (restoring full-scroll) above the breakpoint,
+     so resizing a window or rotating a tablet degrades cleanly.
+     ============================================================ */
+  var mq = window.matchMedia('(max-width:900px)');
+  var htmlEl = document.documentElement;
+  var panels = Array.prototype.slice.call(document.querySelectorAll('[data-panel]'));
+  var allNavLinks = Array.prototype.slice.call(document.querySelectorAll('[data-nav-link]'));
+  var panelNames = panels.map(function(p){ return p.getAttribute('data-panel'); });
+  var initialHash = (window.location.hash || '').replace('#', '');
+  var currentPanel = panelNames.indexOf(initialHash) !== -1 ? initialHash : 'home';
+
+  function setActivePanel(name, opts){
+    opts = opts || {};
+    currentPanel = name;
+    panels.forEach(function(p){
+      var isMatch = p.getAttribute('data-panel') === name;
+      p.classList.toggle('is-active', isMatch);
+      if (isMatch){
+        /* elements inside a panel hidden by display:none never intersect
+           the viewport, so IntersectionObserver-driven reveals/counters
+           never fire. Force them visible the moment their panel opens. */
+        p.querySelectorAll('.reveal-up:not(.is-visible)').forEach(function(el){
+          el.classList.add('is-visible');
+        });
+        p.querySelectorAll('[data-count-to]').forEach(function(el){
+          if (el.textContent === '0') runCounterIfDefined(el);
+        });
+        /* native lazy-loading can stall on elements that were
+           display:none at load; nudge them once their panel is shown */
+        p.querySelectorAll('img[loading="lazy"]').forEach(function(img){
+          if (!img.complete) img.loading = 'eager';
+        });
+      }
+    });
+    allNavLinks.forEach(function(link){
+      link.classList.toggle('is-active', link.getAttribute('data-target') === name);
+    });
+    if (!opts.skipScroll) window.scrollTo({ top:0, behavior:'auto' });
+    if (opts.focusPanel){
+      var target = panels.filter(function(p){ return p.getAttribute('data-panel') === name; })[0];
+      if (target){ target.setAttribute('tabindex','-1'); target.focus({ preventScroll:true }); }
+    }
+  }
+  function runCounterIfDefined(el){
+    if (typeof runCounter === 'function') runCounter(el);
+  }
+
+  function activateShell(){
+    htmlEl.classList.add('mobile-shell');
+    setActivePanel(currentPanel, { skipScroll:true });
+  }
+  function deactivateShell(){
+    htmlEl.classList.remove('mobile-shell');
+    panels.forEach(function(p){ p.classList.remove('is-active'); });
+  }
+
+  function handleShellChange(e){
+    if (e.matches) activateShell();
+    else deactivateShell();
+  }
+  handleShellChange(mq);
+  if (mq.addEventListener) mq.addEventListener('change', handleShellChange);
+  else if (mq.addListener) mq.addListener(handleShellChange); /* older Safari */
+
+  /* ============================================================
+     12. NAV LINK CLICK HANDLING (shared desktop + mobile)
+     ============================================================ */
+  var mobileMenu = document.getElementById('mobileMenu');
+  var navToggle = document.getElementById('navToggle');
+
+  function closeMobileOverlay(){
+    if (!mobileMenu) return;
+    mobileMenu.classList.remove('is-open');
+    mobileMenu.hidden = true;
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Open menu');
+    document.body.style.overflow = '';
+  }
+  function openMobileOverlay(){
+    if (!mobileMenu) return;
+    mobileMenu.hidden = false;
+    requestAnimationFrame(function(){ mobileMenu.classList.add('is-open'); });
+    navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Close menu');
+    document.body.style.overflow = 'hidden';
+  }
+  if (navToggle){
+    navToggle.addEventListener('click', function(){
+      var isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) closeMobileOverlay(); else openMobileOverlay();
+    });
+  }
+
+  allNavLinks.forEach(function(link){
+    link.addEventListener('click', function(e){
+      var targetName = link.getAttribute('data-target');
+      if (!targetName) return;
+
+      if (htmlEl.classList.contains('mobile-shell')){
+        /* app-shell mode: swap panel, don't let the browser jump-scroll */
+        e.preventDefault();
+        closeMobileOverlay();
+        setActivePanel(targetName, { focusPanel:true });
+      } else {
+        /* full-scroll desktop / tablet mode: let the anchor work, just close overlay */
+        closeMobileOverlay();
+      }
+    });
+  });
+
+  /* ============================================================
+     13. DESKTOP SCROLLSPY — highlight nav link for section in view
+     ============================================================ */
+  if ('IntersectionObserver' in window){
+    var scrollSpyObserver = new IntersectionObserver(function(entries){
+      if (htmlEl.classList.contains('mobile-shell')) return;
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          var id = entry.target.getAttribute('data-panel') || entry.target.id;
+          allNavLinks.forEach(function(link){
+            link.classList.toggle('is-active', link.getAttribute('data-target') === id);
+          });
+        }
+      });
+    }, { threshold:0.4, rootMargin:'-30% 0px -50% 0px' });
+    panels.forEach(function(p){ scrollSpyObserver.observe(p); });
+  }
+
+  /* Escape key closes mobile overlay */
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeMobileOverlay();
+  });
+
+})();
+</script>
+
+</body>
+</html>
